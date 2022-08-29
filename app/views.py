@@ -29,3 +29,19 @@ def student_add(request):
         "form":form
     }
     return render(request, "app/student_add.html",context)
+
+
+# update process
+
+def student_update(request,id):
+    student = Student.objects.get(id=id)
+    form = StudentForm(instance=student)
+    if(request.method == "POST"):
+        form = StudentForm(request.POST,instance=student)  # here is important
+        if(form.is_valid()):
+            form.save()
+            return redirect("list")
+    context = {
+        "form":form
+    }
+    return render(request, "app/student_update.html",context)
