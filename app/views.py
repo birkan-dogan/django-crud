@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Student
+from .forms import StudentForm
 # Create your views here.
 def index(request):
     return render(request, "app/index.html")
@@ -12,3 +13,19 @@ def student_list(request):
          "students":students
      }
      return render(request, "app/student_list.html",context)
+
+
+# create process (POST)
+
+def student_add(request):
+    form = StudentForm()
+    if (request.method == "POST"):
+        form = StudentForm(request.POST)
+        if (form.is_valid()):
+            form.save()
+            return redirect("list")
+
+    context = {
+        "form":form
+    }
+    return render(request, "app/student_add.html",context)
